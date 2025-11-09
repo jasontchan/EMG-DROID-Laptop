@@ -47,6 +47,8 @@ def collect_trajectory(
         assert isinstance(obs_pointer, dict)
     if save_images:
         assert save_filepath is not None
+    if env.emg:
+        assert env.emg_streams["emg_lower"].is_connected()
 
     # Reset States #
     if controller is not None:
@@ -72,7 +74,7 @@ def collect_trajectory(
         control_timestamps = {"step_start": time_ms()}
 
         # Get Observation #
-        obs = env.get_observation() #this is from robot_env.py where they have 
+        obs = env.get_observation() #this is from robot_env.py where they have all the environment obs
         if obs_pointer is not None:
             obs_pointer.update(obs)
         obs["controller_info"] = controller_info
@@ -127,6 +129,7 @@ def collect_trajectory(
                 env.camera_reader.stop_recording()
             if save_filepath:
                 traj_writer.close(metadata=controller_info)
+            # TODO: possibly disconnect myoband
             return controller_info
 
 

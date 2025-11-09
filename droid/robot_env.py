@@ -11,9 +11,11 @@ from droid.misc.server_interface import ServerInterface
 from droid.misc.time import time_ms
 from droid.misc.transformations import change_pose_frame
 
+from droid.emg_utils.utils import make_emg_streams
+
 
 class RobotEnv(gym.Env):
-    def __init__(self, action_space="cartesian_velocity", gripper_action_space=None, camera_kwargs={}, do_reset=True):
+    def __init__(self, action_space="cartesian_velocity", gripper_action_space=None, camera_kwargs={}, do_reset=True, emg=False):
         # Initialize Gym Environment
         super().__init__()
 
@@ -41,6 +43,15 @@ class RobotEnv(gym.Env):
         self.camera_reader = MultiCameraWrapper(camera_kwargs)
         self.calibration_dict = load_calibration_info()
         self.camera_type_dict = camera_type_dict
+
+        self.emg = emg
+
+        # Create EMG streams
+        if self.emg:
+            self.emg_streams = make_emg_streams()
+
+            for emg_band in self.emg_streams.values():
+                emg_band.connect()
 
         # Reset Robot
         if do_reset:
@@ -87,6 +98,16 @@ class RobotEnv(gym.Env):
     def read_cameras(self):
         return self.camera_reader.read_cameras()
 
+    def read_emg_streams(self):
+        emg_streams_dict = {}
+        full_timestamp_dict = {}
+        for key, emg in self.emg_streams.items():
+            timestamp_dict = {key + "_read_start": time_ms()}
+            emg_streams_dict[key] = emg.read()
+            timestamp_dict[key + "_read_end"] = time_ms()
+            full_timestamp_dict.update(timestamp_dict)
+        return emg_streams_dict, full_timestamp_dict
+
     def get_state(self):
         read_start = time_ms()
         state_dict, timestamp_dict = self._robot.get_robot_state()
@@ -129,5 +150,11 @@ class RobotEnv(gym.Env):
             for (full_cam_id, info) in cam_intr_info.items():
                 intrinsics[full_cam_id] = info["cameraMatrix"]
         obs_dict["camera_intrinsics"] = intrinsics
+
+        # EMG
+        if self.emg:
+            emg_obs, emg_timestamp = self.read_emg_streams()
+            obs_dict.update(emg_obs)
+            obs_dict["timestamp"]["emgs"] = emg_timestamp
 
         return obs_dict

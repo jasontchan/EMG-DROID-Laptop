@@ -1,5 +1,6 @@
 import os
 from cv2 import aruco
+from pyomyo.src.pyomyo.pyomyo import emg_mode
 
 # Robot Params #
 nuc_ip = "192.168.0.174"
@@ -14,6 +15,15 @@ robot_serial_number = "289830-1325797"
 hand_camera_id = "14452055"
 varied_camera_1_id = "23474280"
 # varied_camera_2_id = ""
+
+# EMG Connection
+num_bands = 1
+emg_names = ["emg_lower"]
+emg_mac = ["176:102:48:60:192:228"]
+emg_tty = ["/dev/ttyACM0"]
+emg_window_length = 100
+emg_mode_type = emg_mode.PREPROCESSED
+
 
 # Charuco Board Params #
 CHARUCOBOARD_ROWCOUNT = 9

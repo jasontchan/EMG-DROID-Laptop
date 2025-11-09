@@ -17,6 +17,9 @@ services:
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ${DOCKER_XAUTH}:${DOCKER_XAUTH}
+      - ${ROOT_DIR}/droid/pyomyo:/app/droid/pyomyo
+      - ${ROOT_DIR}/droid/emg_utils:/app/droid/emg_utils
+      - ${ROOT_DIR}/droid/trajectory_utils/misc.py:/app/droid/trajectory_utils/misc.py:rw
       - ${ROOT_DIR}/droid/camera_utils/info.py:/app/droid/camera_utils/info.py:rw
       - ${ROOT_DIR}/droid/trajectory_utils/trajectory_writer.py:/app/droid/trajectory_utils/trajectory_writer.py:rw
       - ${ROOT_DIR}/droid/user_interface/data_collector.py:/app/droid/user_interface/data_collector.py:rw
