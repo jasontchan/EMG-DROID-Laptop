@@ -72,7 +72,7 @@ def collect_trajectory(
         control_timestamps = {"step_start": time_ms()}
 
         # Get Observation #
-        obs = env.get_observation()
+        obs = env.get_observation() #this is from robot_env.py where they have 
         if obs_pointer is not None:
             obs_pointer.update(obs)
         obs["controller_info"] = controller_info

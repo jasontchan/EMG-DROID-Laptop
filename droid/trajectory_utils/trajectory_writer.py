@@ -36,6 +36,8 @@ def write_dict_to_hdf5(hdf5_file, data_dict, keys_to_ignore=["image", "depth", "
                 dshape = ()
             else:
                 dtype, dshape = curr_data.dtype, curr_data.shape
+            print(f"adding new KEY to hdf5: {key}")
+            print(f"dshape: {dshape}, dtype: {dtype}")
             hdf5_file.create_dataset(key, (1, *dshape), maxshape=(None, *dshape), dtype=dtype)
         else:
             hdf5_file[key].resize(hdf5_file[key].shape[0] + 1, axis=0)

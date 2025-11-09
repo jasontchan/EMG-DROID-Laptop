@@ -21,7 +21,7 @@ def attempt_n_times(function_list, max_attempts, sleep_time=0.1):
 
 
 class ServerInterface:
-    def __init__(self, ip_address="127.0.0.1", launch=True):
+    def __init__(self, ip_address="0.0.0.0", launch=True):
         self.ip_address = ip_address
         self.establish_connection()
 

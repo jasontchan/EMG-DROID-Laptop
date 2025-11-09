@@ -34,7 +34,7 @@ if [ "$first_time" = "yes" ]; then
 	echo -e "Ensure all submodules are cloned and oculus_reader APK file pulled locally \n"
 
 	eval "$(ssh-agent -s)"
-	ssh-add /home/robot/.ssh/id_ed25519
+	ssh-add /home/chopper/.ssh/id_ed25519
 	curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
 	apt update && apt install -y git-lfs
 	git lfs install # has to be run only once on a single user account

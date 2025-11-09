@@ -17,6 +17,15 @@ services:
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ${DOCKER_XAUTH}:${DOCKER_XAUTH}
+      - ${ROOT_DIR}/droid/camera_utils/info.py:/app/droid/camera_utils/info.py:rw
+      - ${ROOT_DIR}/droid/trajectory_utils/trajectory_writer.py:/app/droid/trajectory_utils/trajectory_writer.py:rw
+      - ${ROOT_DIR}/droid/user_interface/data_collector.py:/app/droid/user_interface/data_collector.py:rw
+      - ${ROOT_DIR}/droid/misc/server_interface.py:/app/droid/misc/server_interface.py:rw
+      - ${ROOT_DIR}/droid/fairo/polymetis/polymetis/src/clients/franka_panda_client/franka_hand_client.cpp:/app/droid/fairo/polymetis/polymetis/src/clients/franka_panda_client/franka_hand_client.cpp:rw
+      - ${ROOT_DIR}/droid/fairo/polymetis/polymetis/protos/polymetis.proto:/app/droid/fairo/polymetis/polymetis/protos/polymetis.proto:rw
+      - ${ROOT_DIR}/droid/fairo/polymetis/polymetis/python/polymetis/gripper_interface.py:/app/droid/fairo/polymetis/polymetis/python/polymetis/gripper_interface.py:rw
+      - ${ROOT_DIR}/droid/franka/launch_gripper.sh:/app/droid/franka/launch_gripper.sh:rw
+      - ${ROOT_DIR}/.docker/laptop/entrypoint.sh:/app/.docker/laptop/entrypoint.sh:rw
       - ${ROOT_DIR}/droid/misc/parameters.py:/app/droid/misc/parameters.py
       - ${ROOT_DIR}/droid/calibration/calibration_info.json:/app/droid/calibration/calibration_info.json
       - ${ROOT_DIR}/data:/app/data
