@@ -51,7 +51,7 @@ def run_indexing(
     progress = tqdm(desc="[*] Stage 1 =>> Indexing")
 
     paths_to_index = parse_data_directory(data_dir, lab_agnostic=lab_agnostic, process_failures=process_failures)
-
+    print("PATHS TO INDEX", paths_to_index)
     for outcome_dir, outcome in paths_to_index:
         if outcome == "failure" and not outcome_dir.exists():
             # Note: Some labs don't have failure trajectories...
@@ -172,9 +172,9 @@ def run_processing(
                     trajectory_dir,
                     metadata_record["wrist_cam_serial"],
                     metadata_record["ext1_cam_serial"],
-                    metadata_record["ext2_cam_serial"],
+                    # metadata_record["ext2_cam_serial"],
                     metadata_record["ext1_cam_extrinsics"],
-                    metadata_record["ext2_cam_extrinsics"],
+                    # metadata_record["ext2_cam_extrinsics"],
                 )
                 if not valid_convert:
                     errored_paths[outcome][rel_trajectory_dir] = "[Processing Error] Corrupted SVO / Failed Conversion"
@@ -186,7 +186,7 @@ def run_processing(
                     metadata_record[key] = vid_path
 
             # Convert SVOs --> Depth
-            if extract_depth_data:
+            if extract_depth_data: #false so should be fine
                 valid_convert, vid_paths = convert_depths(
                     data_dir,
                     trajectory_dir,

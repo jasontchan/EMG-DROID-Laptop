@@ -9,6 +9,7 @@ parser = argparse.ArgumentParser(description='Process a boolean argument for rig
 # Adding the right_controller argument
 parser.add_argument('--left_controller', action='store_true', help='Use left oculus controller')
 parser.add_argument('--right_controller', action='store_true', help='Use right oculus controller')
+# parser.add_argument('--emg', action='store_true', help='Collect EMG data with Myo Armband')
 
 
 args = parser.parse_args()

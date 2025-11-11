@@ -1,5 +1,7 @@
 import os
 from cv2 import aruco
+import sys
+sys.path.insert(0, "/app/droid")
 from pyomyo.src.pyomyo.pyomyo import emg_mode
 
 # Robot Params #

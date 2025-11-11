@@ -285,6 +285,7 @@ class Myo(object):
                 ):
                     addr = list(multiord(p.payload[2:8]))
                     print("MAC ADDRESS IS", addr, flush=True)
+                    print("INPUT ADDRESS IS", input_address, flush=True)
                     if addr != input_address:
                         pass
                     else:

@@ -4,8 +4,8 @@ import queue
 import numpy as np
 from .emg import EMG
 
-# import sys
-# sys.path.insert(0, "/Users/jasonchan/Code/lerobot")
+import sys
+sys.path.insert(0, "/app/droid")
 from pyomyo.src.pyomyo.pyomyo import Myo, emg_mode
 # from .configuration_myo import MyoEMGConfig
 # from ..configs import EMGConfig
@@ -44,7 +44,7 @@ class EMGMyo(EMG):
 
         self.myo = None
 
-        self.mac = mac
+        self.mac = [int(n) for n in mac.split(":")]
         self.tty = tty
         self.position = position
         self.window_length = window_length

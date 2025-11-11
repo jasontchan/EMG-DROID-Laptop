@@ -32,8 +32,8 @@ from droid.postprocessing.util.validate import validate_user2id
 #         + Simple ID generator --> python -c "import uuid; print(str(uuid.uuid4())[:8])"
 # fmt: off
 REGISTERED_MEMBERS: Dict[str, Dict[str, str]] = {
-    "Lab Name": {
-        "First Last": "4b1a56cc",
+    "NECL": {
+        "Jason Chan": "39c5af4c",
     },
 }
 validate_user2id(REGISTERED_MEMBERS)

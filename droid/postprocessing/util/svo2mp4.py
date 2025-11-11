@@ -103,9 +103,9 @@ def convert_mp4s(
     demo_dir: Path,
     wrist_serial: str,
     ext1_serial: str,
-    ext2_serial: str,
+    # ext2_serial: str,
     ext1_extrinsics: List[float],
-    ext2_extrinsics: List[float],
+    # ext2_extrinsics: List[float],
     do_fuse: bool = False,
 ) -> Tuple[bool, Optional[Dict[str, str]]]:
     """Convert each `serial.svo` to a valid MP4 file, updating the `data_record` path entries in-place."""
@@ -121,9 +121,9 @@ def convert_mp4s(
     #       - `pos` is (x, y, z) offset --> moving left of robot is +y, moving right is -y
     #       - `rot` is rotation offset as Euler (`R.from_matrix(rmat).as_euler("xyz")`)
     #   => Therefore we can compute `left = ext1_serial if ext1_extrinsics[1] > ext2_extrinsics[1]`
-    ext1_y, ext2_y = ext1_extrinsics[1], ext2_extrinsics[1]
-    left_serial = ext1_serial if ext1_y > ext2_y else ext2_serial
-    right_serial = ext2_serial if left_serial == ext1_serial else ext1_serial
+    # ext1_y, ext2_y = ext1_extrinsics[1], ext2_extrinsics[1]
+    left_serial = ext1_serial 
+    # right_serial = ext2_serial if left_serial == ext1_serial else ext1_serial
 
     # Create Dictionary of SVO/MP4 Paths
     rel_svo_path, rel_mp4_path = svo_path.relative_to(data_dir), mp4_path.relative_to(data_dir)
@@ -132,21 +132,18 @@ def convert_mp4s(
         "wrist_mp4_path": str(rel_mp4_path / f"{wrist_serial}.mp4"),
         "ext1_svo_path": str(rel_svo_path / f"{ext1_serial}.svo"),
         "ext1_mp4_path": str(rel_mp4_path / f"{ext1_serial}.mp4"),
-        "ext2_svo_path": str(rel_svo_path / f"{ext2_serial}.svo"),
-        "ext2_mp4_path": str(rel_mp4_path / f"{ext2_serial}.mp4"),
         "left_mp4_path": str(rel_mp4_path / f"{left_serial}.mp4"),
-        "right_mp4_path": str(rel_mp4_path / f"{right_serial}.mp4"),
     }
 
-    if do_fuse:
-        # Build Fused Left/Right MP4 Files via FFMPEG
-        left, right = str(mp4_path / f"{left_serial}.mp4"), str(mp4_path / f"{right_serial}.mp4")
-        subprocess.run(
-            f"ffmpeg -y -i {left} -i {right} -vsync 2 -filter_complex hstack {mp4_path / 'fused.mp4'!s}",
-            shell=True,
-            check=True,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
+    # if do_fuse:
+    #     # Build Fused Left/Right MP4 Files via FFMPEG
+    #     left, right = str(mp4_path / f"{left_serial}.mp4"), str(mp4_path / f"{right_serial}.mp4")
+    #     subprocess.run(
+    #         f"ffmpeg -y -i {left} -i {right} -vsync 2 -filter_complex hstack {mp4_path / 'fused.mp4'!s}",
+    #         shell=True,
+    #         check=True,
+    #         stdout=subprocess.DEVNULL,
+    #         stderr=subprocess.DEVNULL,
+    #     )
 
     return True, record_paths

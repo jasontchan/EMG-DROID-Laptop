@@ -100,7 +100,7 @@ def parse_trajectory(
         with h5py.File(trajectory_dir / "trajectory.h5", "r") as h5:
             assert "action" in h5.keys(), "Incomplete HDF5 file; no actual trajectory data logged!"
             trajectory_record, attrs, trajectory_length = {}, h5.attrs, int(h5["action"]["joint_position"].shape[0])
-            exts = ["ext1", "ext2"]
+            exts = ["ext1"]
 
             # Extract Camera Information
             camera_types, camera_extrinsics = h5["observation"]["camera_type"], h5["observation"]["camera_extrinsics"]

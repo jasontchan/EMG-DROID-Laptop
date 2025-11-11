@@ -17,6 +17,17 @@ services:
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ${DOCKER_XAUTH}:${DOCKER_XAUTH}
+      - ${ROOT_DIR}/openpi-client:/app/openpi-client
+      - ${ROOT_DIR}/scripts/openpi_inference.py:/app/scripts/openpi_inference.py:rw
+      - ${ROOT_DIR}/droid/postprocessing/util/create_language_annotation_dict.py:/app/droid/postprocessing/util/create_language_annotation_dict.py:rw
+      - ${ROOT_DIR}/droid/postprocessing/schema.py:/app/droid/postprocessing/schema.py:rw
+      - ${ROOT_DIR}/droid/postprocessing/util/svo2mp4.py:/app/droid/postprocessing/util/svo2mp4.py:rw
+      - ${ROOT_DIR}/droid/postprocessing/util/validate.py:/app/droid/postprocessing/util/validate.py:rw
+      - ${ROOT_DIR}/scripts/postprocess.py:/app/scripts/postprocess.py:rw
+      - ${ROOT_DIR}/droid/postprocessing/stages.py:/app/droid/postprocessing/stages.py:rw
+      - ${ROOT_DIR}/droid/postprocessing/parse.py:/app/droid/postprocessing/parse.py:rw
+      - ${ROOT_DIR}/droid/user_interface/gui.py:/app/droid/user_interface/gui.py:rw
+      - ${ROOT_DIR}/droid/robot_env.py:/app/droid/robot_env.py:rw
       - ${ROOT_DIR}/droid/pyomyo:/app/droid/pyomyo
       - ${ROOT_DIR}/droid/emg_utils:/app/droid/emg_utils
       - ${ROOT_DIR}/droid/trajectory_utils/misc.py:/app/droid/trajectory_utils/misc.py:rw
