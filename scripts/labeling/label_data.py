@@ -3,7 +3,7 @@ import os
 from collections import defaultdict
 
 from droid.camera_utils.wrappers.recorded_multi_camera_wrapper import RecordedMultiCameraWrapper
-from droid.training.data_loading.trajectory_sampler import collect_data_folderpaths
+from droid.data_loading.trajectory_sampler import collect_data_folderpaths
 from droid.trajectory_utils.misc import visualize_timestep
 from droid.trajectory_utils.trajectory_reader import TrajectoryReader
 

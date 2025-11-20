@@ -15,7 +15,7 @@ from droid.emg_utils.utils import make_emg_streams
 
 
 class RobotEnv(gym.Env):
-    def __init__(self, action_space="cartesian_velocity", gripper_action_space=None, camera_kwargs={}, do_reset=True, emg=False):
+    def __init__(self, action_space="cartesian_velocity", gripper_action_space=None, camera_kwargs={}, do_reset=True, emg=True):
         # Initialize Gym Environment
         super().__init__()
 
@@ -154,6 +154,7 @@ class RobotEnv(gym.Env):
         # EMG
         if self.emg:
             emg_obs, emg_timestamp = self.read_emg_streams()
+            # print(f"EMGOBS: {emg_obs}")
             obs_dict.update(emg_obs)
             obs_dict["timestamp"]["emgs"] = emg_timestamp
 

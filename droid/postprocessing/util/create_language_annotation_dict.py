@@ -7,6 +7,7 @@ def build_annotations(data_dir, output_path):
     for dir in os.listdir(data_dir):
         for fname in os.listdir(dir):
             if fname.endswith(".json"):
+                print(fname)
                 meta_path = os.path.join(data_dir, dir, fname)
                 with open(meta_path, "r") as f:
                     meta = json.load(f)

@@ -21,6 +21,7 @@ from droid.misc.parameters import robot_ip
 from droid.user_interface.gui_parameters import *
 from droid.user_interface.misc import *
 from droid.user_interface.text import *
+from droid.trajectory_utils.misc import visualize_trajectory
 
 
 class RobotGUI(tk.Tk):
@@ -67,6 +68,7 @@ class RobotGUI(tk.Tk):
             CanRobotResetPage,
             ControllerOffPage,
             PreferredTasksPage,
+            CollectEMGPage,
             SceneConfigurationPage,
             CameraPage,
             EnlargedImagePage,
@@ -631,6 +633,97 @@ class PreferredTasksPage(tk.Frame):
     def initialize_page(self):
         self.notes_txt.focus()
 
+class CollectEMGPage(tk.Frame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
+        self.controller.bind("<KeyRelease>", self.moniter_keys, add="+")
+        self._start_btn = None
+
+        title_lbl = tk.Label(self, text="Collect EMG Data Aligned to Trajectory",
+                             font=Font(size=30, weight="bold"))
+        title_lbl.place(relx=0.5, rely=0.05, anchor="n")
+
+        self._start_btn = tk.Button(
+            self,
+            text="START",
+            font=Font(size=18, weight="bold"),
+            padx=12, pady=6,
+            borderwidth=6,
+            command=self._on_start_clicked
+        )
+        self._start_btn.place(relx=0.5, rely=0.14, anchor="n")
+
+        instr_lbl = tk.Label(self, text=emg_collection_text, font=Font(size=20, slant="italic"))
+        instr_lbl.place(relx=0.5, rely=0.20, anchor="n")
+
+        back_btn = tk.Button(
+            self,
+            text="BACK",
+            highlightbackground="red",
+            font=Font(size=30, weight="bold"),
+            padx=3, pady=5,
+            borderwidth=10,
+            command=lambda: controller.show_frame(SceneConfigurationPage),
+        )
+        back_btn.place(relx=0.7, rely=0.75)
+
+        group_lbl = tk.Label(self, text=emg_paths_label, font=Font(size=20, underline=True))
+        group_lbl.place(relx=0.01, rely=0.6)
+
+        self.emg_paths_txt = tk.Text(self, height=15, width=65, font=Font(size=15))
+        self.emg_paths_txt.place(relx=0.02, rely=0.64)
+
+        self.camera_kwargs = dict(
+            hand_camera=dict(image=True, resolution=(0, 0)),
+            varied_camera=dict(image=True, resolution=(0, 0)),
+        )
+
+    def _on_start_clicked(self):
+        # disable button to prevent double-clicks
+        self._start_btn.config(state="disabled")
+
+        #decide which trajectories to overwrite here:
+        data_folders = self.controller.info["emg_paths"]
+
+        t = threading.Thread(target=self.start_collection, daemon=True, args=(data_folders,))
+        t.start()
+
+    def start_collection(self, data_folders):
+        """Long-running start logic."""
+        try:
+            # Example: call into controller or your EMG routine
+            # self.controller.start_emg_collection()
+            print("Starting EMG collection...")
+            for folder in data_folders:
+                #open folder
+                #visualize trajectory
+                h5_filepath = folder + "/trajectory.h5"
+                recording_folderpath = folder + "/recordings/SVO"
+                visualize_trajectory(filepath=h5_filepath, recording_folderpath=recording_folderpath, camera_kwargs=self.camera_kwargs)
+            # ... do work ...
+        finally:
+            # re-enable button on the Tk main thread
+            self.after(0, lambda: self._start_btn.config(state="normal"))
+
+    def get_emg_paths(self):
+        paths = self.emg_paths_txt.get("1.0", END).replace("\n", "")
+        paths = paths.replace(no_tasks_text, "").split(";")
+        paths = [t for t in paths if (not t.isspace() and len(t))]
+        return paths
+    
+    def moniter_keys(self, event):
+        if self.controller.curr_frame != self:
+            return
+        if event.keysym in ["Shift_L", "Shift_R"]:
+            self.controller.frames[CameraPage].set_home_frame(CollectEMGPage)
+            self.controller.show_frame(CameraPage, wait=True)
+        
+        self.controller.info["emg_paths"] = self.get_emg_paths()
+
+    def initialize_page(self):
+        pass
+
 
 class SceneConfigurationPage(tk.Frame):
     def __init__(self, parent, controller):
@@ -672,6 +765,17 @@ class SceneConfigurationPage(tk.Frame):
         franka_btn = tk.Button(self, text="Franka Website", font=Font(weight="bold"), height=1, width=16)
         franka_btn.bind("<Button-1>", lambda e: webbrowser.open_new("https://{0}/desk/".format(robot_ip)))
         franka_btn.place(relx=bx, rely=by + 0.065, anchor="n")
+
+        # Collect EMG Button #
+        collect_emg_btn = tk.Button(
+            self,
+            text="Collect EMG Data",
+            font=Font(weight="bold"),
+            height=1,
+            width=16,
+            command=lambda: controller.show_frame(CollectEMGPage),
+        )
+        collect_emg_btn.place(relx=bx, rely=by + 0.095, anchor="n")
 
         # Shift Instructions #
         instr_lbl = tk.Label(self, text=shift_text, font=Font(size=20, slant="italic"))

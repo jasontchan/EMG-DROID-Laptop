@@ -36,10 +36,12 @@ class Args:
     external_camera: str = "left" # which external camera should be fed to the policy, choose from ["left", "right"]
     
     # Rollout parameters
-    max_timesteps: int = 600
+    max_timesteps: int = 2400
     # How many actions to execute from a predicted action chunk before querying policy server again
     # 8 is usually a good default (equals 0.5 seconds of action execution).
     open_loop_horizon: int = 8
+
+    emg: bool = True
 
     # Remote server parameters
     remote_host: str = "0.0.0.0"  # point this to the IP address of the policy server, e.g., "192.168.1.100"
@@ -77,7 +79,7 @@ def main(args: Args):
     ), f"Please specify an external camera to use for the policy, choose from ['left', 'right'], but got {args.external_camera}"
 
     # Initialize the Panda environment. Using joint velocity action space and gripper position action space is very important.
-    env = RobotEnv(action_space="joint_velocity", gripper_action_space="position")
+    env = RobotEnv(action_space="joint_velocity", gripper_action_space="position", emg=True)
     print("Created the droid env!")
 
     # Connect to the policy server
@@ -123,6 +125,7 @@ def main(args: Args):
                         "observation/wrist_image_left": image_tools.resize_with_pad(curr_obs["wrist_image"], 224, 224),
                         "observation/joint_position": curr_obs["joint_position"],
                         "observation/gripper_position": curr_obs["gripper_position"],
+                        "observation/emg": curr_obs["emg"],
                         "prompt": instruction,
                     }
 
@@ -224,6 +227,7 @@ def _extract_observation(args: Args, obs_dict, *, save_to_disk=False):
     cartesian_position = np.array(robot_state["cartesian_position"])
     joint_position = np.array(robot_state["joint_positions"])
     gripper_position = np.array([robot_state["gripper_position"]])
+    emg = np.array(obs_dict["emg_lower"])
 
     # Save the images to disk so that they can be viewed live while the robot is running
     # Create one combined image to make live viewing easy
@@ -239,6 +243,7 @@ def _extract_observation(args: Args, obs_dict, *, save_to_disk=False):
         "cartesian_position": cartesian_position,
         "joint_position": joint_position,
         "gripper_position": gripper_position,
+        "emg": emg,
     }
 
 

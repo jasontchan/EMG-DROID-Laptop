@@ -1,1 +1,6 @@
-pick up the black block and place it in the bowl; pick up the red block and place it in the bowl; pick up the yellow block and place it in the bowl;
+pick up the black block and place it in the bowl;pick up the red block and place it in the bowl;pick up the yellow block and place it in the bowl;
+
+open the coffee machine, then pick up the left coffee pod and place it in the coffee machine, then close the lid and press start;open the coffee machine, then pick up the middle coffee pod and place it in the coffee machine, then close the lid and press start;open the coffee machine, then pick up the right coffee pod and place it in the coffee machine, then close the lid and press start;
+
+
+open the coffee machine, then pick up the correct coffee pod and place it in the coffee machine, then close the lid and press start

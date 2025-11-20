@@ -43,7 +43,12 @@ def write_dict_to_hdf5(hdf5_file, data_dict, keys_to_ignore=["image", "depth", "
             hdf5_file[key].resize(hdf5_file[key].shape[0] + 1, axis=0)
 
         # Save Data #
-        hdf5_file[key][-1] = curr_data
+        # if key == "emg_lower":
+            # print("hdf5_file at key: ", hdf5_file[key])
+        if key == "emg_lower":
+            hdf5_file[key][-1] = curr_data.copy()
+        else:
+            hdf5_file[key][-1] = curr_data
 
 
 class TrajectoryWriter:

@@ -17,7 +17,11 @@ services:
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ${DOCKER_XAUTH}:${DOCKER_XAUTH}
+      - ${ROOT_DIR}/laptop_enter_script.sh:/app/laptop_enter_script.sh:rw
       - ${ROOT_DIR}/openpi-client:/app/openpi-client
+      - ${ROOT_DIR}/droid/user_interface/text.py:/app/droid/user_interface/text.py:rw
+      - ${ROOT_DIR}/scripts/labeling/label_data.py:/app/scripts/labeling/label_data.py:rw
+      - ${ROOT_DIR}/scripts/visualizations/visualize_trajectory.py:/app/scripts/visualizations/visualize_trajectory.py:rw
       - ${ROOT_DIR}/scripts/openpi_inference.py:/app/scripts/openpi_inference.py:rw
       - ${ROOT_DIR}/droid/postprocessing/util/create_language_annotation_dict.py:/app/droid/postprocessing/util/create_language_annotation_dict.py:rw
       - ${ROOT_DIR}/droid/postprocessing/schema.py:/app/droid/postprocessing/schema.py:rw
